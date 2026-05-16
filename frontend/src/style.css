@@ -54,10 +54,8 @@ body {
 }
 
 .sidebar-toggle {
-    position: fixed;
-    top: 80px;
-    left: 16px;
-    z-index: 1100;
+    position: static;
+    margin-right: 8px;
 }
 
 input {
@@ -106,6 +104,12 @@ input {
     border: none;
     background-color: transparent;
     padding: 0;
+}
+
+#sidebar .container-fluid {
+    padding-top: 0px;
+    padding-left: 12px;
+    padding-bottom: 100px;
 }
 
 

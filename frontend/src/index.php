@@ -12,9 +12,14 @@
 <!-- TOP NAVBAR -->
 <nav class="navbar navbar-expand-lg top-navbar shadow-sm">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-      <img src="../assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
-    </a>
+    <div class="d-flex align-items-center gap-2">
+      <button class="btn btn-light shadow-sm sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle navigation">
+        <i class="bi bi-list"></i>
+      </button>
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <img src="../assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
+      </a>
+    </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,15 +32,13 @@
     <button><i class="bi bi-bell"></i></button>
   </div>
 </nav>
-<!-- TOP NAVBAR -->
-<button class="btn btn-light shadow-sm sidebar-toggle" id="sidebarToggle" type="button" aria-label="Toggle navigation">
-  <i class="bi bi-list"></i>
-</button>
+
 <!-- NAVBAR -->
 <nav class="navbar shadow-sm sidebar-navbar sidebar-collapsed" id="sidebar">
   <div class="container-fluid d-flex flex-column align-items-start">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       
+    <h1>MENU</h1>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Home</a>
         </li>
