@@ -10,6 +10,26 @@ body {
     /* Removed padding-left: 260px — that's for sidebar pages, not login */
 }
 
+.has-sidebar {
+    padding-left: 0;
+}
+
+.has-sidebar.sidebar-open {
+    padding-left: 260px;
+}
+
+.has-topbar {
+    padding-top: 72px;
+}
+
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #f7f7f7;
+    z-index: 1040;
+}
 /* Sidebar styles (keep for other pages) */
 .sidebar-navbar {
     position: fixed;
@@ -21,6 +41,23 @@ body {
     border-right: 1px solid rgba(0, 0, 0, 0.08);
     padding: 1rem 0.75rem;
     z-index: 1030;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease-in-out;
+}
+
+.sidebar-navbar.sidebar-open {
+    transform: translateX(0);
+}
+
+.sidebar-navbar.sidebar-collapsed {
+    transform: translateX(-100%);
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 80px;
+    left: 16px;
+    z-index: 1100;
 }
 
 input {
@@ -77,9 +114,12 @@ input {
         padding-left: 0;
     }
     .sidebar-navbar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        border-right: none;
+        position: fixed;
+        width: 260px;
+        height: 100vh;
+        border-right: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .has-sidebar.sidebar-open {
+        padding-left: 0;
     }
 }
