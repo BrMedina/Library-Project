@@ -7,9 +7,10 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-color: #f7f7f7;
-    padding-left: 260px;
+    /* Removed padding-left: 260px — that's for sidebar pages, not login */
 }
 
+/* Sidebar styles (keep for other pages) */
 .sidebar-navbar {
     position: fixed;
     top: 0;
@@ -22,6 +23,35 @@ body {
     z-index: 1030;
 }
 
+
+.login-text-sub {
+    font-family: 'Poppins', sans-serif;
+    color: aliceblue;
+    text-shadow: 10px;
+    font-size: 2em;
+}
+
+/* Logo: responsive, no negative margin */
+.col-lg-5 img {
+    width: clamp(550px, 20vw, 380px);
+    height: auto;
+    display: block;
+}
+
+/* Card: fixed width removed, let Bootstrap columns control it */
+.card {
+    border-top: 10px solid #fdc601;
+    width: 100%;
+}
+
+.forgot-password {
+    color: #FFC107;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+
 @media (max-width: 991.98px) {
     body {
         padding-left: 0;
@@ -32,50 +62,4 @@ body {
         height: auto;
         border-right: none;
     }
-}
-
-
-.col-lg-6.d-none.d-lg-block .login-text,
-.col-lg-6.d-none.d-lg-block .login-text-sub {
-    max-width: 420px;
-    margin: 0 auto;
-    text-align: center;
-    white-space: normal;
-    word-break: break-word;
-}
-
-.login-text-sub {
-    font-family: 'Poppins', sans-serif;
-    color: aliceblue;
-    text-shadow: 10px;
-    font-size: 2em;
-}
-
-.card {
-    border-top: 10px solid #fdc601;
-    width: 620px;
-}
-
-.custom-container {
-    margin: 300px;
-}
-
-/* Shift logo left to avoid overlap with login card */
-.col-lg-6.d-none.d-lg-block img {
-    width: clamp(780px, 24vw, 300px);
-    height: auto;
-    display: block;
-    margin: 0 auto 16px -118px;
-}
-
-/* Shift login form to the right to match image shift */
-.col-lg-6.col-md-7.col-12 {
-    padding-left: 118px;
-}
-
-.forgot-password {
-    color: #FFC107;
-    text-align: right;
-    border: #fdc60100;
-    background-color: #fdc60100;
 }

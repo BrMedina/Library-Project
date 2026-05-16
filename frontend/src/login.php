@@ -9,41 +9,32 @@
 </head>
 <body>
 
-    <div class="container-lg container-md custom-container d-flex justify-content-center flex-column h-100">
-        <div class="row g-0 justify-content-center">
-            <div class="col-lg-6 d-none d-lg-block">
-                <div class="d-flex flex-column justify-content-center h-100">
-                    <div class="d-flex justify-contnet-center">
-                        <img src="../assets/logo2.png" alt="LibLogo" width="800px" height="200px">
-                    </div>
-                </div>
+    <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
+        <div class="row g-0 justify-content-center align-items-center w-100">
+            <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
+                <img src="../assets/logo2.png" alt="LibLogo">
             </div>
 
-            <div class="col-lg-6 col-md-7 col-12">
+            <div class="col-lg-4 col-md-7 col-11">
                 <div class="card shadow">
-                    <div class="card-body p5">
+                    <div class="card-body p-5">
                         <h2 class="mb-4 text-center fw-bold mt-3">Login</h2>
 
-                        <label for="" class="fw-bold">Email</label>
+                        <label for="email" class="fw-bold">Email</label>
                         <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" required class="form-control">
 
-                        <label for="" class="fw-bold mt-3">Password</label>
+                        <label for="password" class="fw-bold mt-3">Password</label>
                         <input type="password" name="password" id="password" placeholder="••••••••" required class="form-control">
 
-                        <div class="row">
+                        <div class="d-flex justify-content-end">
                             <button class="forgot-password mt-2">Forgot Password?</button>
                         </div>
-                        
 
-                        <div class="row px-3 mt-3">
-                            <button class="btn btn-primary btn-lg btn-block">Login</button>
+                        <div class="mt-3">
+                            <button class="btn btn-primary btn-lg w-100">Login</button>
                         </div>
-
-
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
