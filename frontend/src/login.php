@@ -18,7 +18,7 @@
             <div class="col-lg-4 col-md-7 col-11">
                 <div class="card shadow">
                     <div class="card-body p-5">
-                        <h2 class="mb-4 text-center fw-bold mt-3">Login</h2>
+                        <h2 class="mb-4 text-center fw-bold mt-2">Login</h2>
 
                         <label for="email" class="fw-bold">Email</label>
                         <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" required class="form-control">
@@ -31,7 +31,10 @@
                         </div>
 
                         <div class="mt-3">
-                            <button class="btn btn-primary btn-lg w-100">Login</button>
+                            <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
+                        </div>
+                        <div class="d-flex justify-content-center mt-1">
+                            <p>No Account? <button class="register-here">Register Here.</button> </p>
                         </div>
                     </div>
                 </div>
