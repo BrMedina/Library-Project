@@ -9,7 +9,7 @@
 </head>
 <body>
 
-    <div class="container-lg container-md py-5 d-flex justify-content-center flex-column h-100">
+    <div class="container-lg container-md custom-container d-flex justify-content-center flex-column h-100">
         <div class="row g-0 justify-content-center">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-flex flex-column justify-content-center h-100">

@@ -25,6 +25,10 @@ body {
     width: 620px;
 }
 
+.custom-container {
+    margin: 300px;
+}
+
 
 
 /* Shift logo left to avoid overlap with login card */
