@@ -34,12 +34,14 @@ body {
     }
 }
 
-.login-text {
-    font-family: 'Poppins', sans-serif;
-    color: aliceblue;
-    text-shadow: 10px;
-    font-size: 5em;
-    font-weight: bold;
+
+.col-lg-6.d-none.d-lg-block .login-text,
+.col-lg-6.d-none.d-lg-block .login-text-sub {
+    max-width: 420px;
+    margin: 0 auto;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
 }
 
 .login-text-sub {
@@ -47,4 +49,33 @@ body {
     color: aliceblue;
     text-shadow: 10px;
     font-size: 2em;
+}
+
+.card {
+    border-top: 10px solid #fdc601;
+    width: 620px;
+}
+
+.custom-container {
+    margin: 300px;
+}
+
+/* Shift logo left to avoid overlap with login card */
+.col-lg-6.d-none.d-lg-block img {
+    width: clamp(780px, 24vw, 300px);
+    height: auto;
+    display: block;
+    margin: 0 auto 16px -118px;
+}
+
+/* Shift login form to the right to match image shift */
+.col-lg-6.col-md-7.col-12 {
+    padding-left: 118px;
+}
+
+.forgot-password {
+    color: #FFC107;
+    text-align: right;
+    border: #fdc60100;
+    background-color: #fdc60100;
 }
