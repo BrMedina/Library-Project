@@ -23,6 +23,11 @@ body {
     z-index: 1030;
 }
 
+input {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
 
 .login-text-sub {
     font-family: 'Poppins', sans-serif;
@@ -44,6 +49,12 @@ body {
     width: 100%;
     background-color: #F4F3F2;
 }
+
+.button {
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
 
 .forgot-password {
     color: #0051ff;
