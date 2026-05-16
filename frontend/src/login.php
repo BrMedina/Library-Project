@@ -12,7 +12,7 @@
     <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
         <div class="row g-0 justify-content-center align-items-center w-100">
             <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
-                <img src="../assets/logo2.png" alt="LibLogo">
+                <img src="../assets/logo2.png" alt="LibLogo" draggable="false">
             </div>
 
             <div class="col-lg-4 col-md-7 col-11">
@@ -31,16 +31,40 @@
                         </div>
 
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
+                            <button type="submit" class="btn btn-primary btn-lg w-100" onclick="">Login</button>
+                            <hr>
                         </div>
                         <div class="d-flex justify-content-center mt-1">
-                            <p>No Account? <button class="register-here">Register Here.</button> </p>
+                            <p>No Account? <a href="register.php"><button class="register-here">Register Here.</button></a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+    <script>
+        const backgroundImages = [
+            "../assets/background/bg-2.jpg",
+            "../assets/background/bg-5.jpg",
+            "../assets/background/bg-7.jpg",
+            "../assets/background/bg-8.jpg",
+            "../assets/background/bg-9.jpg"
+        ];
+
+        let backgroundIndex = 0;
+
+        function setBackgroundImage() {
+            document.body.style.backgroundImage = `url(${backgroundImages[backgroundIndex]})`;
+            backgroundIndex = (backgroundIndex + 1) % backgroundImages.length;
+        }
+
+        backgroundImages.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+        });
+
+        setBackgroundImage();
+        setInterval(setBackgroundImage, 10000);
+    </script>
 </body>
 </html>

@@ -42,10 +42,11 @@ body {
 .card {
     border-top: 10px solid #fdc601;
     width: 100%;
+    background-color: #F4F3F2;
 }
 
 .forgot-password {
-    color: #FFC107;
+    color: #0051ff;
     border: none;
     background-color: transparent;
     padding: 0;
