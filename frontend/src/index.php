@@ -13,17 +13,18 @@
 <nav class="navbar navbar-expand-lg top-navbar shadow-sm">
   <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-      <img src="../assets/headerLogo.png" alt="Logo" width="200" height="44" class="d-inline-block align-text-top">
+      <img src="../assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="topNavbar">
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control ms-5 me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>
+    <button><i class="bi bi-bell"></i></button>
   </div>
 </nav>
 <!-- TOP NAVBAR -->
@@ -34,11 +35,28 @@
 <nav class="navbar shadow-sm sidebar-navbar sidebar-collapsed" id="sidebar">
   <div class="container-fluid d-flex flex-column align-items-start">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="#"><i class="bi bi-book me-2"></i></i>My Library</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-card-list me-2"></i>Category</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-bookmark-heart me-2"></i>Favourite</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-info-circle me-2"></i>About</a>
+        </li>
+        <hr>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="bi bi-box-arrow-left me-2"></i>Logout</a>
         </li>
       </ul>
   </div>
