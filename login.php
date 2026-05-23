@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="style.css">
     <title>Login</title>
 </head>
-<body>
+<body>  
 
     <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
         <div class="row g-0 justify-content-center align-items-center w-100">
             <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
-                <img src="../assets/logo2.png" alt="LibLogo" draggable="false">
+                <img src="./assets/logo2.png" alt="LibLogo" draggable="false">
             </div>
 
             <div class="col-lg-4 col-md-7 col-11">
@@ -47,29 +47,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script>
-        const backgroundImages = [
-            "../assets/background/bg-2.jpg",
-            "../assets/background/bg-5.jpg",
-            "../assets/background/bg-7.jpg",
-            "../assets/background/bg-8.jpg",
-            "../assets/background/bg-9.jpg"
-        ];
-
-        let backgroundIndex = 0;
-
-        function setBackgroundImage() {
-            document.body.style.backgroundImage = `url(${backgroundImages[backgroundIndex]})`;
-            backgroundIndex = (backgroundIndex + 1) % backgroundImages.length;
-        }
-
-        backgroundImages.forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
-
-        setBackgroundImage();
-        setInterval(setBackgroundImage, 10000);
-    </script>
+    <script src="backgroundScript.js"></script>
 </body>
 </html>

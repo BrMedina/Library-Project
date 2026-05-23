@@ -13,17 +13,42 @@
     <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
         <div class="row g-0 justify-content-center align-items-center w-100">
             <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
-                <img src="../assets/logo2.png" alt="LibLogo" draggable="false">
+                <img src="./assets/logo2.png" alt="LibLogo" draggable="false">
             </div>
 
             <div class="col-lg-4 col-md-7 col-11">
                 <div class="card shadow">
-                    <div class="card-body p-5">
+                    <div class="card-body p-4">
                         <h2 class="mb-4 text-center fw-bold mt-2">Register</h2>
+
+
+                        <div class="row mb-3">
+                            <div class="col text-center">
+                                <label for="" class="fw-bold">Profile Picture</label>
+                                    <div class="col">
+                                        <img id="preview" src="./assets/emptyProfile.jpg" alt="uploadProfile" width="150" height="150" class="img-thumbnail mb-3">
+                                    </div>
+                                    <div class="col">
+                                        <label for="" class="fw-bold">Upload your Profile Picture</label>
+                                        <input type="file" name="upload_img" id="" class="form-control" onchange="previewing(event);">
+                                    </div>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col mb-3">
-                                
+                                <label for="" class="fw-bold">First Name</label>
+                                <input type="text" name="fname" id="fname" placeholder="John" required class="form-control">
+                            </div>
+                            <div class="col">
+                                <label for="" class="fw-bold">Last Name</label>
+                                <input type="text" name="lname" id="lname" placeholder="Doe" required class="form-control">
+                            </div>
+                        </div>
+                        
+
+                        <div class="row">
+                            <div class="col mb-3">
                                 <i class="bi bi-person"></i>
                                 <label for="" class="fw-bold">Username</label>
                                 <input type="text" name="username" id="username" placeholder="John Doe" required class="form-control">
@@ -47,7 +72,7 @@
 
 
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary btn-lg w-100 button">Register</button>
+                            <button type="submit" name="sub" class="btn btn-primary btn-lg w-100 button">Register</button>
                             <hr>
                         </div>
                         <div class="d-flex justify-content-center mt-1">
@@ -60,29 +85,32 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script>
-        const backgroundImages = [
-            "../assets/background/bg-2.jpg",
-            "../assets/background/bg-5.jpg",
-            "../assets/background/bg-7.jpg",
-            "../assets/background/bg-8.jpg",
-            "../assets/background/bg-9.jpg"
-        ];
-
-        let backgroundIndex = 0;
-
-        function setBackgroundImage() {
-            document.body.style.backgroundImage = `url(${backgroundImages[backgroundIndex]})`;
-            backgroundIndex = (backgroundIndex + 1) % backgroundImages.length;
-        }
-
-        backgroundImages.forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
-
-        setBackgroundImage();
-        setInterval(setBackgroundImage, 10000);
-    </script>
+    <script src="backgroundScript.js"></script>
 </body>
 </html>
+
+
+
+<?php
+
+
+if(isset($_POST['sub']))
+
+    $fname = ($_POST['fname']);
+    $lname = ($_POST['lname']);
+    $username = ($_POST['username']);
+    $number = ($_POST['number']);
+    $email = ($_POST['email']);
+    $password = MD5($_POST['password']);
+
+    $membername = $fname ." ". $lname;
+
+    $imagepath = "./imgStorage".$_FILES['upload_img']['name'];
+    copy($_FILES['upload_img']['tmp_name'], $imagepath);
+
+    $otp = rand(000000,999999);
+
+    
+    
+    
+?>
