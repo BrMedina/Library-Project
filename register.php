@@ -12,72 +12,69 @@
 
     <div class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
         <div class="row g-0 justify-content-center align-items-center w-100">
-            <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
-                <img src="./assets/logo2.png" alt="LibLogo" draggable="false">
-            </div>
+            <div class="col-lg-7 col-md-9 col-11">
+                <div class="card shadow w-100" style="max-width: 900px; margin: 0 auto;">
+                    <div class="card-body p-3">
+                        <form method="POST" action="register.php" enctype="multipart/form-data">
+                            <div class="text-center mb-2">
+                                <img src="./assets/headerLogo.png" alt="Buenadvides Logo" draggable="false" style="height: 64px;">
+                            </div>
+                            <h2 class="mb-3 text-center fw-bold">Register</h2>
 
-            <div class="col-lg-4 col-md-7 col-11">
-                <div class="card shadow">
-                    <div class="card-body p-4">
-                        <h2 class="mb-4 text-center fw-bold mt-2">Register</h2>
-
-
-                        <div class="row mb-3">
-                            <div class="col text-center">
-                                <label for="" class="fw-bold">Profile Picture</label>
-                                    <div class="col">
-                                        <img id="preview" src="./assets/emptyProfile.jpg" alt="uploadProfile" width="150" height="150" class="img-thumbnail mb-3">
+                            <div class="row g-2 align-items-start">
+                                <div class="col-md-3 text-center">
+                                    <label class="form-label fw-bold mb-1">Profile</label>
+                                    <div>
+                                        <img id="preview" src="./assets/emptyProfile.jpg" alt="uploadProfile" width="120" height="120" class="img-thumbnail mb-2">
                                     </div>
-                                    <div class="col">
-                                        <label for="" class="fw-bold">Upload your Profile Picture</label>
-                                        <input type="file" name="upload_img" id="" class="form-control" onchange="previewing(event);">
+                                    <input type="file" name="upload_img" class="form-control form-control-sm" onchange="previewing(event);">
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="row g-2">
+                                        <div class="col-sm-6">
+                                            <label class="form-label mb-1">First Name</label>
+                                            <input type="text" name="fname" id="fname" placeholder="John" required class="form-control">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label mb-1">Last Name</label>
+                                            <input type="text" name="lname" id="lname" placeholder="Doe" required class="form-control">
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label class="form-label mb-1">Username</label>
+                                            <input type="text" name="username" id="username" placeholder="John Doe" required class="form-control">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="form-label mb-1">Contact Number</label>
+                                            <input type="tel" name="number" id="number" placeholder="09XXXXXXX" required class="form-control">
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label class="form-label mb-1">Address</label>
+                                            <input type="text" name="address" id="address" placeholder="123 Marikina St." required class="form-control">
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <label for="email" class="form-label mb-1">Email</label>
+                                            <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" required class="form-control">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="password" class="form-label mb-1">Password</label>
+                                            <input type="password" name="password" id="password" placeholder="••••••••" required class="form-control">
+                                        </div>
                                     </div>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="" class="fw-bold">First Name</label>
-                                <input type="text" name="fname" id="fname" placeholder="John" required class="form-control">
+                            <div class="mt-3">
+                                <button type="submit" name="sub" class="btn btn-primary btn-lg w-100 button">Register</button>
+                                <hr>
                             </div>
-                            <div class="col">
-                                <label for="" class="fw-bold">Last Name</label>
-                                <input type="text" name="lname" id="lname" placeholder="Doe" required class="form-control">
+                            <div class="d-flex justify-content-center mt-1">
+                                <p>Already Have an Account? <a href="login.php" class="register-here">Login Here.</a></p>
                             </div>
-                        </div>
-                        
-
-                        <div class="row">
-                            <div class="col mb-3">
-                                <i class="bi bi-person"></i>
-                                <label for="" class="fw-bold">Username</label>
-                                <input type="text" name="username" id="username" placeholder="John Doe" required class="form-control">
-                            </div>
-                            <div class="col">
-                                <i class="bi bi-telephone"></i>
-                                <label for="" class="fw-bold">Contact Number</label>
-                                <input type="tel" name="number" id="number" placeholder="09XXXXXXX" required class="form-control">
-                            </div>
-                        </div>
-                        
-                        
-                        <i class="bi bi-envelope"></i>
-                        <label for="email" class="fw-bold">Email</label>
-                        <input type="email" name="email" id="email" placeholder="johndoe@gmail.com" required class="form-control bi bi-envelope">
-
-                        <i class="bi bi-lock"></i>
-                        <label for="password" class="fw-bold mt-3">Password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" required class="form-control">
-
-
-
-                        <div class="mt-3">
-                            <button type="submit" name="sub" class="btn btn-primary btn-lg w-100 button">Register</button>
-                            <hr>
-                        </div>
-                        <div class="d-flex justify-content-center mt-1">
-                            <p>Already Have an Account? <a href="login.php"><button class="register-here">Login Here.</button></a> </p>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -92,14 +89,17 @@
 
 
 <?php
+//for debugging purposes naka connect lang muna sa table remove require_once if done
+require_once 'dbconnection.php';
 
 
-if(isset($_POST['sub']))
+if(isset($_POST['sub'])){
 
     $fname = ($_POST['fname']);
     $lname = ($_POST['lname']);
     $username = ($_POST['username']);
     $number = ($_POST['number']);
+    $address = ($_POST['address']);
     $email = ($_POST['email']);
     $password = MD5($_POST['password']);
 
@@ -110,7 +110,10 @@ if(isset($_POST['sub']))
 
     $otp = rand(000000,999999);
 
-    
-    
-    
+    $insertSql = "INSERT INTO tbl_memberdetails (fname, lname, username, number, address, email, password)
+    VALUES ('$fname', '$lname', '$username', '$number', '$address', '$email', '$password')";
+
+    $res = $conn->query($insertSql);
+
+};
 ?>

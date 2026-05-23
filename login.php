@@ -38,7 +38,7 @@
                             <hr>
                         </div>
                         <div class="d-flex justify-content-center mt-1">
-                            <p>No Account? <a href="register.php"><button class="register-here">Register Here.</button></a></p>
+                            <p>No Account? <a href="register.php" class="register-here">Register Here.</a></p>
                         </div>
                     </div>
                 </div>
