@@ -105,7 +105,7 @@ if(isset($_POST['sub'])){
 
     $membername = $fname ." ". $lname;
 
-    $imagepath = "./imgStorage".$_FILES['upload_img']['name'];
+    $imagepath = "imgStorage/".$_FILES['upload_img']['name'];
     copy($_FILES['upload_img']['tmp_name'], $imagepath);
 
     $otp = rand(000000,999999);
