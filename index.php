@@ -17,15 +17,15 @@
         <i class="bi bi-list"></i>
       </button>
       <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-        <img src="../assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
+        <img src="./assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
       </a>
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="topNavbar">
-      <form class="d-flex" role="search">
-        <input class="form-control ms-5 me-2" type="search" placeholder="Search" aria-label="Search">
+      <form class="d-flex align-items-end ms-auto" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
       </form>
     </div>
@@ -38,7 +38,7 @@
   <div class="container-fluid d-flex flex-column align-items-start">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
       
-    <h1>MENU</h1>
+    <h1>E-Library</h1>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Home</a>
         </li>
@@ -66,7 +66,16 @@
 </nav>
 <!-- NAVBAR -->
 
-<!-- MAIN SECTION -->
+<!-- MAIN SECTION (Display list of Recommended books, Books by category, etc.) -->
+<main id="main">
+  <div class="p-5 shadow-sm rounded-4">
+    <h2>Recommended</h2>
+  </div>
+</main>
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>
   const sidebar = document.getElementById('sidebar');
