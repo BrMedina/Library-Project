@@ -3,7 +3,8 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$database = "db_libuseraccount";
+$database = "library"; // modified db name, can change back to db_libuseraccount.
+// $database = "db_libuseraccount";
 
 $conn = new mysqli($servername, $username, $password, $database);
 

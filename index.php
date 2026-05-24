@@ -1,3 +1,11 @@
+<?php
+require "dbconnection.php";
+
+$query = 'SELECT * FROM book_table ORDER BY RAND() LIMIT 4';
+
+$res = $conn->query($query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,14 +75,50 @@
 <!-- NAVBAR -->
 
 <!-- MAIN SECTION (Display list of Recommended books, Books by category, etc.) -->
-<main id="main">
-  <div class="p-5 shadow-sm rounded-4">
+<main id="main" class="bg-secondary-subtle p-5 d-flex flex-column gap-5">
+  <div class="p-5 shadow-sm rounded-4 bg-white">
     <h2>Recommended</h2>
+    <div class="row g-4 mt-2">
+      <?php
+      if($res->num_rows > 0){
+        foreach($res as $field){
+          $isbn = $field['ISBN'];
+          $coverUrl = "https://covers.openlibrary.org/b/isbn/{$isbn}-M.jpg";
+          ?>
+          <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="card h-100 shadow-sm book-card">
+              <div class="book-cover-container" style="height: 250px; overflow: hidden;">
+                <img src="<?php echo $coverUrl; ?>" alt="<?php echo htmlspecialchars($field['title']); ?>" class="card-img-top h-100 object-fit-cover" style="object-fit: cover; width: 100%;">
+              </div>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><?php echo htmlspecialchars($field['title']); ?></h5>
+                <p class="card-text text-muted small mb-2">
+                  <?php echo htmlspecialchars($field['author']); ?>
+                </p>
+                <p class="card-text small mb-2">
+                  <span class="badge bg-secondary"><?php echo htmlspecialchars($field['genre']); ?></span>
+                </p>
+                <p class="card-text text-muted small mb-2">
+                  <strong>Published:</strong> <?php echo htmlspecialchars($field['publication_date']); ?>
+                </p>
+              </div>
+            </div>
+          </div>
+          <?php
+        }
+      } else {
+        echo "<p class='text-danger'>No record found</p>";
+      }
+      ?>
+    </div>  
+  </div>
+  <div class="p-5 shadow-sm rounded-4 bg-white">
+    <h2>Categories</h2>
+    <div class="">
+
+    </div>  
   </div>
 </main>
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 <script>
@@ -117,3 +161,4 @@
 </script>
 </body>
 </html>
+
