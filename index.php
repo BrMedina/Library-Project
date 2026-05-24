@@ -4,6 +4,14 @@ require "dbconnection.php";
 $query = 'SELECT * FROM book_table ORDER BY RAND() LIMIT 4';
 
 $res = $conn->query($query);
+
+// Query to get all unique genres
+$genreQuery = 'SELECT DISTINCT genre FROM book_table ORDER BY genre';
+$genreRes = $conn->query($genreQuery);
+
+// Query to get all books
+$allBooksQuery = 'SELECT * FROM book_table ORDER BY title';
+$allBooksRes = $conn->query($allBooksQuery);
 ?>
 
 <!DOCTYPE html>
@@ -99,7 +107,7 @@ $res = $conn->query($query);
                   <span class="badge bg-secondary"><?php echo htmlspecialchars($field['genre']); ?></span>
                 </p>
                 <p class="card-text text-muted small mb-2">
-                  <strong>Published:</strong> <?php echo htmlspecialchars($field['publication_date']); ?>
+                  <?php echo htmlspecialchars($field['publication_date']); ?>
                 </p>
               </div>
             </div>
@@ -114,8 +122,50 @@ $res = $conn->query($query);
   </div>
   <div class="p-5 shadow-sm rounded-4 bg-white">
     <h2>Categories</h2>
-    <div class="">
-
+    <div class="mb-4 d-flex flex-nowrap overflow-x-auto pb-2" style="gap: 0.5rem;">
+      <button class="btn btn-outline-primary mb-2 genre-filter rounded-pill" data-genre="all" style="white-space: nowrap;">All</button>
+      <?php
+      if($genreRes->num_rows > 0){
+        foreach($genreRes as $genre){
+          $genreName = htmlspecialchars($genre['genre']);
+          echo "<button class='btn btn-outline-primary mb-2 genre-filter' data-genre='{$genreName}' style='white-space: nowrap;'>{$genreName}</button>";
+        }
+      }
+      ?>
+    </div>
+    <div class="row g-4" id="genreBooks">
+      <?php
+      if($allBooksRes->num_rows > 0){
+        foreach($allBooksRes as $field){
+          $isbn = $field['ISBN'];
+          $coverUrl = "https://covers.openlibrary.org/b/isbn/{$isbn}-M.jpg";
+          $genre = htmlspecialchars($field['genre']);
+          ?>
+          <div class="col-md-6 col-lg-4 col-xl-3 book-item" data-genre="<?php echo $genre; ?>">
+            <div class="card h-100 shadow-sm book-card">
+              <div class="book-cover-container" style="height: 250px; overflow: hidden;">
+                <img src="<?php echo $coverUrl; ?>" alt="<?php echo htmlspecialchars($field['title']); ?>" class="card-img-top h-100 object-fit-cover" style="object-fit: cover; width: 100%;">
+              </div>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><?php echo htmlspecialchars($field['title']); ?></h5>
+                <p class="card-text text-muted small mb-2">
+                  <?php echo htmlspecialchars($field['author']); ?>
+                </p>
+                <p class="card-text small mb-2">
+                  <span class="badge bg-secondary"><?php echo $genre; ?></span>
+                </p>
+                <p class="card-text text-muted small mb-2">
+                  <?php echo htmlspecialchars($field['publication_date']); ?>
+                </p>
+              </div>
+            </div>
+          </div>
+          <?php
+        }
+      } else {
+        echo "<p class='text-danger'>No record found</p>";
+      }
+      ?>
     </div>  
   </div>
 </main>
@@ -158,6 +208,31 @@ $res = $conn->query($query);
 
   desktopQuery.addEventListener('change', syncSidebarWithViewport);
   syncSidebarWithViewport();
+
+  // Genre filtering functionality
+  const genreFilters = document.querySelectorAll('.genre-filter');
+  const bookItems = document.querySelectorAll('.book-item');
+
+  genreFilters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      const selectedGenre = filter.getAttribute('data-genre');
+      
+      // Update active button
+      genreFilters.forEach(btn => btn.classList.remove('btn-primary'));
+      genreFilters.forEach(btn => btn.classList.add('btn-outline-primary'));
+      filter.classList.remove('btn-outline-primary');
+      filter.classList.add('btn-primary');
+      
+      // Filter books
+      bookItems.forEach(book => {
+        if (selectedGenre === 'all' || book.getAttribute('data-genre') === selectedGenre) {
+          book.style.display = '';
+        } else {
+          book.style.display = 'none';
+        }
+      });
+    });
+  });
 </script>
 </body>
 </html>
