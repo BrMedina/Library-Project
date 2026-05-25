@@ -83,6 +83,19 @@ input {
     border-top: 10px solid #fdc601;
     width: 100%;
     background-color: #F4F3F2;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+}
+
+.card:hover {
+    background-color: #c9c8c8;
+    transform: translateY(-10px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+.book-cover-container {
+    height: 250px;
+    overflow: hidden;
 }
 
 .button {

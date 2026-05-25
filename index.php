@@ -94,8 +94,8 @@ $allBooksRes = $conn->query($allBooksQuery);
           $coverUrl = "https://covers.openlibrary.org/b/isbn/{$isbn}-M.jpg";
           ?>
           <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="card h-100 shadow-sm book-card">
-              <div class="book-cover-container" style="height: 250px; overflow: hidden;">
+            <div class="card h-100 shadow-sm book-card" onclick="showBookModal(this)" data-title="<?php echo htmlspecialchars($field['title']); ?>" data-author="<?php echo htmlspecialchars($field['author']); ?>" data-genre="<?php echo htmlspecialchars($field['genre']); ?>" data-date="<?php echo htmlspecialchars($field['publication_date']); ?>" data-cover="<?php echo $coverUrl; ?>" data-availability="<?php echo isset($field['availability']) ? htmlspecialchars($field['availability']) : 'Available'; ?>">
+              <div class="book-cover-container">
                 <img src="<?php echo $coverUrl; ?>" alt="<?php echo htmlspecialchars($field['title']); ?>" class="card-img-top h-100 object-fit-cover" style="object-fit: cover; width: 100%;">
               </div>
               <div class="card-body d-flex flex-column">
@@ -142,8 +142,13 @@ $allBooksRes = $conn->query($allBooksQuery);
           $genre = htmlspecialchars($field['genre']);
           ?>
           <div class="col-md-6 col-lg-4 col-xl-3 book-item" data-genre="<?php echo $genre; ?>">
-            <div class="card h-100 shadow-sm book-card">
-              <div class="book-cover-container" style="height: 250px; overflow: hidden;">
+            <div class="card h-100 shadow-sm book-card" onclick="showBookModal(this)" 
+            data-title="<?php echo htmlspecialchars($field['title']); ?>" 
+            data-author="<?php echo htmlspecialchars($field['author']); ?>" 
+            data-genre="<?php echo $genre; ?>" 
+            data-date="<?php echo htmlspecialchars($field['publication_date']); ?>" 
+            data-cover="<?php echo $coverUrl; ?>" data-availability="<?php echo $field['availability_status']; ?>">
+              <div class="book-cover-container">
                 <img src="<?php echo $coverUrl; ?>" alt="<?php echo htmlspecialchars($field['title']); ?>" class="card-img-top h-100 object-fit-cover" style="object-fit: cover; width: 100%;">
               </div>
               <div class="card-body d-flex flex-column">
@@ -166,6 +171,35 @@ $allBooksRes = $conn->query($allBooksQuery);
         echo "<p class='text-danger'>No record found</p>";
       }
       ?>
+    <!-- Book Modal -->
+    <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="bookModalLabel">Book Details</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4">
+                <img id="modalBookCover" src="" alt="Book Cover" class="img-fluid rounded">
+              </div>
+              <div class="col-md-8">
+                <h3 id="modalBookTitle"></h3>
+                <p class="text-muted mb-2"><strong>Author:</strong> <span id="modalBookAuthor"></span></p>
+                <p class="text-muted mb-2"><strong>Genre:</strong> <span id="modalBookGenre"></span></p>
+                <p class="text-muted mb-2"><strong>Publication Date:</strong> <span id="modalBookDate"></span></p>
+                <p class="text-muted mb-2"><strong>Availability:</strong> <span id="modalBookAvailability"></span></p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary borrow">Borrow Book</button>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>  
   </div>
 </main>
@@ -176,6 +210,7 @@ $allBooksRes = $conn->query($allBooksQuery);
   const sidebarToggle = document.getElementById('sidebarToggle');
   const body = document.body;
   const desktopQuery = window.matchMedia('(min-width: 992px)');
+  
 
   function openSidebar() {
     sidebar.classList.remove('sidebar-collapsed');
@@ -233,6 +268,36 @@ $allBooksRes = $conn->query($allBooksQuery);
       });
     });
   });
+
+  // Show book modal
+  function showBookModal(cardElement) {
+    const title = cardElement.getAttribute('data-title');
+    const author = cardElement.getAttribute('data-author');
+    const genre = cardElement.getAttribute('data-genre');
+    const date = cardElement.getAttribute('data-date');
+    const cover = cardElement.getAttribute('data-cover');
+    const availability = cardElement.getAttribute('data-availability');
+    const borrowbtn = document.querySelector('.modal-footer .borrow');
+
+    // Update modal content
+    document.getElementById('modalBookTitle').textContent = title;
+    document.getElementById('modalBookAuthor').textContent = author;
+    document.getElementById('modalBookGenre').textContent = genre;
+    document.getElementById('modalBookDate').textContent = date;
+    document.getElementById('modalBookCover').src = cover;
+    document.getElementById('modalBookAvailability').textContent = availability;
+    
+    // Disable button if book is borrowed or reserved
+    if(availability === 'Borrowed' || availability === 'Reserved'){
+      borrowbtn.disabled = true;
+    } else {
+      borrowbtn.disabled = false;
+    }
+
+    // Show modal
+    const bookModal = new bootstrap.Modal(document.getElementById('bookModal'));
+    bookModal.show();
+  }
 </script>
 </body>
 </html>
