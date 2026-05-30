@@ -1,5 +1,6 @@
 <?php
 require "dbconnection.php";
+session_start();
 
 $query = 'SELECT * FROM book_table ORDER BY RAND() LIMIT 4';
 
@@ -87,7 +88,7 @@ $allBooksRes = $conn->query($allBooksQuery);
           $coverUrl = "https://covers.openlibrary.org/b/isbn/{$isbn}-M.jpg";
           ?>
           <div class="col-md-6 col-lg-4 col-xl-3">
-            <div class="card h-100 shadow-sm book-card" onclick="showBookModal(this)" data-title="<?php echo htmlspecialchars($field['title']); ?>" data-author="<?php echo htmlspecialchars($field['author']); ?>" data-genre="<?php echo htmlspecialchars($field['genre']); ?>" data-date="<?php echo htmlspecialchars($field['publication_date']); ?>" data-cover="<?php echo $coverUrl; ?>" data-availability="<?php echo isset($field['availability']) ? htmlspecialchars($field['availability']) : 'Available'; ?>">
+            <div class="card h-100 shadow-sm book-card" onclick="showBookModal(this)" data-book-id="<?php echo $field['book_id']; ?>" data-title="<?php echo htmlspecialchars($field['title']); ?>" data-author="<?php echo htmlspecialchars($field['author']); ?>" data-genre="<?php echo htmlspecialchars($field['genre']); ?>" data-date="<?php echo htmlspecialchars($field['publication_date']); ?>" data-cover="<?php echo $coverUrl; ?>" data-availability="<?php echo isset($field['availability']) ? htmlspecialchars($field['availability']) : 'Available'; ?>">
               <div class="book-cover-container">
                 <img src="<?php echo $coverUrl; ?>" alt="<?php echo htmlspecialchars($field['title']); ?>" class="card-img-top h-100 object-fit-cover" style="object-fit: cover; width: 100%;">
               </div>
@@ -136,6 +137,7 @@ $allBooksRes = $conn->query($allBooksQuery);
           ?>
           <div class="col-md-6 col-lg-4 col-xl-3 book-item" data-genre="<?php echo $genre; ?>">
             <div class="card h-100 shadow-sm book-card" onclick="showBookModal(this)" 
+            data-book-id="<?php echo $field['book_id']; ?>" 
             data-title="<?php echo htmlspecialchars($field['title']); ?>" 
             data-author="<?php echo htmlspecialchars($field['author']); ?>" 
             data-genre="<?php echo $genre; ?>" 
@@ -172,24 +174,27 @@ $allBooksRes = $conn->query($allBooksQuery);
             <h1 class="modal-title fs-5" id="bookModalLabel">Details</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-4">
-                <img id="modalBookCover" src="" alt="Book Cover" class="img-fluid rounded">
-              </div>
-              <div class="col-md-8">
-                <h3 id="modalBookTitle"></h3>
-                <p class="text-muted mb-2"><strong>Author:</strong> <span id="modalBookAuthor"></span></p>
-                <p class="text-muted mb-2"><strong>Genre:</strong> <span id="modalBookGenre"></span></p>
-                <p class="text-muted mb-2"><strong>Publication Date:</strong> <span id="modalBookDate"></span></p>
-                <p class="text-muted mb-2"><strong>Availability:</strong> <span id="modalBookAvailability"></span></p>
+          <form id="bookingForm" method="POST" action="borrowpage.php">
+            <input type="hidden" id="bookIdInput" name="book_id">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <img id="modalBookCover" src="" alt="Book Cover" class="img-fluid rounded">
+                </div>
+                <div class="col-md-8">
+                  <h3 id="modalBookTitle"></h3>
+                  <p class="text-muted mb-2"><strong>Author:</strong> <span id="modalBookAuthor"></span></p>
+                  <p class="text-muted mb-2"><strong>Genre:</strong> <span id="modalBookGenre"></span></p>
+                  <p class="text-muted mb-2"><strong>Publication Date:</strong> <span id="modalBookDate"></span></p>
+                  <p class="text-muted mb-2"><strong>Availability:</strong> <span id="modalBookAvailability"></span></p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary borrow">Borrow Book</button>
-          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary borrow" name="borrow">Borrow Book</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -264,6 +269,7 @@ $allBooksRes = $conn->query($allBooksQuery);
 
   // Show book modal
   function showBookModal(cardElement) {
+    const bookId = cardElement.getAttribute('data-book-id');
     const title = cardElement.getAttribute('data-title');
     const author = cardElement.getAttribute('data-author');
     const genre = cardElement.getAttribute('data-genre');
@@ -279,6 +285,10 @@ $allBooksRes = $conn->query($allBooksQuery);
     document.getElementById('modalBookDate').textContent = date;
     document.getElementById('modalBookCover').src = cover;
     document.getElementById('modalBookAvailability').textContent = availability;
+    
+    // Update form action with book_id query parameter
+    document.getElementById('bookingForm').action = 'borrowpage.php';
+    document.getElementById('bookIdInput').value = bookId;
     
     // Disable button if book is borrowed or reserved
     if(availability === 'Borrowed' || availability === 'Reserved'){
