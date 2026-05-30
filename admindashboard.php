@@ -2,8 +2,18 @@
 require "dbconnection.php";
 session_start();
 
+if(!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'Administrator') {
+    if(isset($_SESSION['user_type']) && $_SESSION['user_type'] === 'Librarian') {
+        header('Location: librariandashboard.php');
+    } else {
+        header('Location: index.php');
+    }
+    exit();
+}
+
 // Handle logout
 if(isset($_GET['logout']) && $_GET['logout'] == '1') {
+    writeLog($conn, 'Logged Out');
     session_destroy();
     header('Location: login.php');
     exit();
@@ -13,9 +23,16 @@ if(isset($_GET['logout']) && $_GET['logout'] == '1') {
 $activeSection = 'homeSection';
 if(isset($_GET['section'])) {
     $section = $_GET['section'];
-    if ($section === 'usersSection' || $section === 'booksSection' || $section === 'homeSection') {
+    if ($section === 'usersSection' || $section === 'booksSection' || $section === 'logsSection' || $section === 'homeSection') {
         $activeSection = $section;
     }
+}
+
+function writeLog($conn, $action) {
+    $userId = isset($_SESSION['id']) ? intval($_SESSION['id']) : 'NULL';
+    $safeAction = $conn->real_escape_string($action);
+    $logSql = "INSERT INTO logs_table (user_id, action, datetime) VALUES ($userId, '$safeAction', NOW())";
+    $conn->query($logSql);
 }
 
 // Handle Delete User
@@ -29,9 +46,7 @@ if(isset($_POST['deleteUser'])) {
     $deleteUserSql = "DELETE FROM user_table WHERE user_id = $user_id";
     $conn->query($deleteUserSql);
     
-    // Log action
-    $logSql = "INSERT INTO user_table (action, datetime) VALUES ('Deleted User ID: $user_id', NOW())";
-    // Note: Adjust based on your logging table structure
+    writeLog($conn, "Deleted User ID: $user_id");
     
     echo "<script>Swal.fire('Success', 'User deleted successfully', 'success');</script>";
     $activeSection = 'usersSection';
@@ -63,6 +78,7 @@ if(isset($_POST['saveUser'])) {
         $conn->query($updateMemberSql);
         
         echo "<script>Swal.fire('Success', 'User updated successfully', 'success');</script>";
+        writeLog($conn, "Updated User ID: $user_id");
     } else {
         // Add new user
         $otp = rand(000000, 999999);
@@ -78,6 +94,7 @@ if(isset($_POST['saveUser'])) {
             $conn->query($insertMemberSql);
             
             echo "<script>Swal.fire('Success', 'User added successfully', 'success');</script>";
+            writeLog($conn, "Added User: $fullname");
         }
     }
     $activeSection = 'usersSection';
@@ -89,6 +106,7 @@ if(isset($_POST['deleteBook'])) {
     $conn->query("DELETE FROM borrowing_record_table WHERE book_id = $book_id");
     $conn->query("DELETE FROM book_table WHERE book_id = $book_id");
     echo "<script>Swal.fire('Success', 'Book deleted successfully', 'success');</script>";
+    writeLog($conn, "Deleted Book ID: $book_id");
     $activeSection = 'booksSection';
 }
 
@@ -108,10 +126,12 @@ if(isset($_POST['saveBook'])) {
         $updateBookSql = "UPDATE book_table SET title='$title', author='$author', ISBN='$isbn', genre='$genre', publication_date='$publication_date', availability_status='$availability_status', category_id=$categorySql WHERE book_id=$book_id";
         $conn->query($updateBookSql);
         echo "<script>Swal.fire('Success', 'Book updated successfully', 'success');</script>";
+        writeLog($conn, "Updated Book ID: $book_id");
     } else {
         $insertBookSql = "INSERT INTO book_table (title, author, ISBN, genre, publication_date, availability_status, category_id) VALUES ('$title', '$author', '$isbn', '$genre', '$publication_date', '$availability_status', $categorySql)";
         $conn->query($insertBookSql);
         echo "<script>Swal.fire('Success', 'Book added successfully', 'success');</script>";
+        writeLog($conn, "Added Book: $title");
     }
 
     $activeSection = 'booksSection';
@@ -129,6 +149,7 @@ if(isset($_POST['deleteBorrow'])) {
         }
     }
     echo "<script>Swal.fire('Success', 'Borrowed book record deleted successfully', 'success');</script>";
+    writeLog($conn, "Deleted Borrow Record ID: $record_id");
     $activeSection = 'booksSection';
 }
 
@@ -156,6 +177,7 @@ if(isset($_POST['saveBorrow'])) {
     }
 
     echo "<script>Swal.fire('Success', 'Borrow record saved successfully', 'success');</script>";
+    writeLog($conn, $record_id ? "Updated Borrow Record ID: $record_id" : "Added Borrow Record for Book ID: $book_id");
     $activeSection = 'booksSection';
 }
 
@@ -230,6 +252,12 @@ $borrowResult = $conn->query($borrowDisplaySQL);
 
 $bookOptionsRes = $conn->query("SELECT book_id, title FROM book_table ORDER BY title");
 $memberOptionsRes = $conn->query("SELECT member_id, member_name FROM member_table ORDER BY member_name");
+
+$logsDisplaySQL = "SELECT l.logs_id, l.user_id, u.full_name, l.action, l.datetime 
+FROM logs_table l 
+LEFT JOIN user_table u ON l.user_id = u.user_id 
+ORDER BY l.datetime DESC";
+$logsResult = $conn->query($logsDisplaySQL);
 ?>
 
 <!DOCTYPE html>
@@ -266,6 +294,9 @@ $memberOptionsRes = $conn->query("SELECT member_id, member_name FROM member_tabl
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         
     <h2>Welcome, <?php echo $_SESSION['user_type']; ?></h2>
+        <li class="nav-item">
+            <a class="nav-link" href="admindashboard.php?section=logsSection"><i class="bi bi-clock-history me-2"></i>Check Logs</a>
+        </li>
         <li class="nav-item">
             <a class="nav-link" href="admindashboard.php?section=usersSection"><i class="bi bi-people me-2"></i>Modify Users</a>
         </li>
@@ -329,13 +360,13 @@ $memberOptionsRes = $conn->query("SELECT member_id, member_name FROM member_tabl
                     <tbody>
                         <?php foreach ($result as $user) { ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($user['user_id']); ?></td>
-                                <td><?php echo htmlspecialchars($user['full_name']); ?></td>
-                                <td><?php echo htmlspecialchars($user['username']); ?></td>
-                                <td><?php echo htmlspecialchars($user['email']); ?></td>
-                                <td><?php echo htmlspecialchars($user['user_tablecol']); ?></td>
-                                <td><?php echo htmlspecialchars($user['address'] ?? 'N/A'); ?></td>
-                                <td><span class='badge bg-info'><?php echo htmlspecialchars($user['role']); ?></span></td>
+                                <td><?php echo ($user['user_id']); ?></td>
+                                <td><?php echo ($user['full_name']); ?></td>
+                                <td><?php echo ($user['username']); ?></td>
+                                <td><?php echo ($user['email']); ?></td>
+                                <td><?php echo ($user['user_tablecol']); ?></td>
+                                <td><?php echo ($user['address'] ?? 'N/A'); ?></td>
+                                <td><span class='badge bg-info'><?php echo ($user['role']); ?></span></td>
                                 <td><span class='badge <?php echo $user['status'] == 'Active' ? 'bg-success' : 'bg-warning'; ?>'><?php echo htmlspecialchars($user['status']); ?></span></td>
                                 <td>
                                     <button class='btn btn-sm btn-warning me-2' data-bs-toggle='modal' data-bs-target='#editUserModal' onclick='editUser(<?php echo json_encode($user); ?>)'>
@@ -467,6 +498,41 @@ $memberOptionsRes = $conn->query("SELECT member_id, member_name FROM member_tabl
                         </tr>
                     <?php } } else { ?>
                         <tr><td colspan="7" class="text-center">No borrowed book records found.</td></tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- LOGS SECTION -->
+    <div id="logsSection" class="p-5 shadow-sm rounded-4 bg-white" <?php echo $activeSection === 'logsSection' ? '' : 'style="display:none;"'; ?>>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Activity Logs</h2>
+            <span class="text-muted">Recent dashboard actions</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Log ID</th>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Action</th>
+                        <th>Date/Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if($logsResult && $logsResult->num_rows > 0) { foreach($logsResult as $log) { ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($log['logs_id']); ?></td>
+                            <td><?php echo htmlspecialchars($log['user_id'] ?? 'N/A'); ?></td>
+                            <td><?php echo htmlspecialchars($log['full_name'] ?? 'Unknown'); ?></td>
+                            <td><?php echo htmlspecialchars($log['action']); ?></td>
+                            <td><?php echo htmlspecialchars($log['datetime']); ?></td>
+                        </tr>
+                    <?php } } else { ?>
+                        <tr><td colspan="5" class="text-center">No logs found.</td></tr>
                     <?php } ?>
                 </tbody>
             </table>

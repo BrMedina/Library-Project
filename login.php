@@ -36,7 +36,19 @@ if(isset($_POST['sub'])) {
         $_SESSION['id'] = $id;
         $_SESSION['memberid'] = $memberId;
 
+        $logssql = "INSERT INTO logs_table (user_id, action, datetime) 
+        VALUES ('" . $_SESSION['id'] . "', 'Logged In', NOW())";
+        $conn->query($logssql);
+
         //success alert and redirect
+        if ($usertype === 'Administrator') {
+            $redirectUrl = 'admindashboard.php';
+        } elseif ($usertype === 'Librarian') {
+            $redirectUrl = 'librariandashboard.php';
+        } else {
+            $redirectUrl = 'index.php';
+        }
+
         $swalScript = "
         <script>
             Swal.fire({
@@ -47,7 +59,7 @@ if(isset($_POST['sub'])) {
                 showConfirmButton: false,
                 timer: 1500
             }).then(() => {
-                window.location.href = 'index.php';
+                window.location.href = '" . $redirectUrl . "';
             });
         </script>
         ";

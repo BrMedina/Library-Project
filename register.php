@@ -36,6 +36,11 @@ if(isset($_POST['sub'])){
         VALUES ('$membername', '$number', '$address')";
         $conn->query($memberLogSql);
 
+        $newUserId = $conn->insert_id;
+        $logssql = "INSERT INTO logs_table (user_id, action, datetime) 
+        VALUES ('" . $newUserId . "', 'Registered', NOW())";
+        $conn->query($logssql);
+
         send_verification($membername, $email, $otp);
         $swalScript = "
         <script>
