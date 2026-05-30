@@ -2,6 +2,13 @@
 require "dbconnection.php";
 session_start();
 
+// Handle logout
+if(isset($_GET['logout']) && $_GET['logout'] == '1') {
+    session_destroy();
+    header('Location: login.php');
+    exit();
+}
+
 $query = 'SELECT * FROM book_table ORDER BY RAND() LIMIT 4';
 
 $res = $conn->query($query);
@@ -69,7 +76,7 @@ $allBooksRes = $conn->query($allBooksQuery);
           <a class="nav-link" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-box-arrow-left me-2"></i>Logout</a>
+          <a class="nav-link" href="index.php?logout=1"><i class="bi bi-box-arrow-left me-2"></i>Logout</a>
         </li>
       </ul>
   </div>

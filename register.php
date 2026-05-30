@@ -31,6 +31,11 @@ if(isset($_POST['sub'])){
     $res = $conn->query($insertSql);
 
     if ($res == true) {
+        // Log member creation to member_table
+        $memberLogSql = "INSERT INTO member_table (member_name, contact_information, address)
+        VALUES ('$membername', '$number', '$address')";
+        $conn->query($memberLogSql);
+
         send_verification($membername, $email, $otp);
         $swalScript = "
         <script>
