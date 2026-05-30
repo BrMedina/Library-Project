@@ -2,6 +2,8 @@
 require "dbconnection.php";
 session_start();
 
+$swalScript = '';
+
 // Get book_id from POST and store in session
 if(isset($_POST['borrow'])){
     $_SESSION['book_id'] = intval($_POST['book_id']);
@@ -32,18 +34,19 @@ if($book_id > 0) {
 
 if(isset($_POST['confirm'])){
     $return_date = isset($_POST['return_date']) ? $_POST['return_date'] : '';
-?>
-<script>
+$swalScript ="
+  <script>
     Swal.fire({
-        title: "Book successfully borrowed.",
-        icon: "success",
+        title: 'Book successfully borrowed.',
+        icon: 'success',
         timer: 1500,
         showConfirmButton: false
     }).then(()=>{
         window.location.href = 'index.php';
     });
-</script>
-<?php } ?>
+  </script>
+  ";
+} ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -139,7 +142,7 @@ if(isset($_POST['confirm'])){
         <div class="card shadow-sm">
           <div class="card-body">
             <h5 class="card-title mb-3">Return Date</h5>
-            <form id="confirmBookingForm" method="POST" action="index.php">
+            <form id="confirmBookingForm" method="POST" action="borrowpage.php">
               <div class="mb-3">
                 <label for="returnDate" class="form-label">Select Return Date:</label>
                 <input type="date" class="form-control" id="returnDate" name="return_date" required>
@@ -159,6 +162,7 @@ if(isset($_POST['confirm'])){
 </main>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<?php echo $swalScript; ?>
 <script>
   // Set minimum return date to today
   const returnDateInput = document.getElementById('returnDate');
@@ -204,7 +208,6 @@ if(isset($_POST['confirm'])){
   desktopQuery.addEventListener('change', syncSidebarWithViewport);
   syncSidebarWithViewport();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
 
