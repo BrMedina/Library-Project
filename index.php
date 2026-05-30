@@ -39,13 +39,6 @@ $allBooksRes = $conn->query($allBooksQuery);
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="topNavbar">
-      <form class="d-flex align-items-end ms-auto" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
-      </form>
-    </div>
-    <button><i class="bi bi-bell"></i></button>
   </div>
 </nav>
 
@@ -56,13 +49,13 @@ $allBooksRes = $conn->query($allBooksQuery);
       
     <h1>E-Library</h1>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Home</a>
+          <a class="nav-link" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"><i class="bi bi-book me-2"></i></i>My Library</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-card-list me-2"></i>Category</a>
+          <a class="nav-link" href="#categories"><i class="bi bi-card-list me-2"></i>Category</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"><i class="bi bi-bookmark-heart me-2"></i>Favourite</a>
@@ -120,7 +113,7 @@ $allBooksRes = $conn->query($allBooksQuery);
       ?>
     </div>  
   </div>
-  <div class="p-5 shadow-sm rounded-4 bg-white">
+  <div class="p-5 shadow-sm rounded-4 bg-white" id="categories">
     <h2>Categories</h2>
     <div class="mb-4 d-flex flex-nowrap overflow-x-auto pb-2" style="gap: 0.5rem;">
       <button class="btn btn-outline-primary mb-2 genre-filter rounded-pill" data-genre="all" style="white-space: nowrap;">All</button>
@@ -176,7 +169,7 @@ $allBooksRes = $conn->query($allBooksQuery);
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="bookModalLabel">Book Details</h1>
+            <h1 class="modal-title fs-5" id="bookModalLabel">Details</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
