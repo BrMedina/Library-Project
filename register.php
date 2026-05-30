@@ -1,3 +1,66 @@
+<?php
+//for debugging purposes naka connect lang muna sa table remove require_once if done
+require_once 'dbconnection.php';
+require_once 'VerifyOTPAddress.php';
+
+$swalScript = '';
+
+if(isset($_POST['sub'])){
+
+    $fname = ($_POST['fname']);
+    $lname = ($_POST['lname']);
+    $username = ($_POST['username']);
+    $number = ($_POST['number']);
+    $address = ($_POST['address']);
+    $email = ($_POST['email']);
+    $password = MD5($_POST['password']);
+
+    $membername = $fname ." ". $lname;
+    $role = "member";
+
+    $imagepath = "imgStorage/".$_FILES['upload_img']['name'];
+    copy($_FILES['upload_img']['tmp_name'], $imagepath);
+
+    $otp = rand(000000,999999);
+    $status = "Pending";
+    $userTableCol = $number;
+
+    $insertSql = "INSERT INTO user_table (full_name, role, username, password, email, user_tablecol, otp, status)
+    VALUES ('$membername', '$role', '$username', '$password', '$email', '$userTableCol', '$otp', '$status')";
+
+    $res = $conn->query($insertSql);
+
+    if ($res == true) {
+        send_verification($membername, $email, $otp);
+        $swalScript = "
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                window.location.href = 'OTPVerification.php';
+            });
+        </script>
+        ";
+    } else {
+        $swalScript = "
+        <script>
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: 'Registration failed',
+                text: 'Please try again.'
+            });
+        </script>
+        ";
+    }
+
+};
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,37 +146,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="backgroundScript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php echo $swalScript; ?>
 </body>
 </html>
-
-
-
-<?php
-//for debugging purposes naka connect lang muna sa table remove require_once if done
-require_once 'dbconnection.php';
-
-
-if(isset($_POST['sub'])){
-
-    $fname = ($_POST['fname']);
-    $lname = ($_POST['lname']);
-    $username = ($_POST['username']);
-    $number = ($_POST['number']);
-    $address = ($_POST['address']);
-    $email = ($_POST['email']);
-    $password = MD5($_POST['password']);
-
-    $membername = $fname ." ". $lname;
-
-    $imagepath = "imgStorage/".$_FILES['upload_img']['name'];
-    copy($_FILES['upload_img']['tmp_name'], $imagepath);
-
-    $otp = rand(000000,999999);
-
-    $insertSql = "INSERT INTO tbl_memberdetails (fname, lname, username, number, address, email, password)
-    VALUES ('$fname', '$lname', '$username', '$number', '$address', '$email', '$password')";
-
-    $res = $conn->query($insertSql);
-
-};
-?>
