@@ -11,21 +11,30 @@ if(isset($_POST['sub'])) {
     $password = md5($_POST['password']);
 
     $loginsql = "Select * from user_table where username = '" . $username ."' and password = '". $password ."' and status ='Active'";
-
+    
     $result = $conn->query($loginsql);
 
     //check if there is a match record
     if ($result->num_rows == 1) {
-        $fieldname = $result -> fetch_assoc();
 
+
+        $fieldname = $result -> fetch_assoc();
+        
         $fullname = $fieldname['full_name'];
         $usertype = $fieldname['role'];
         $id = $fieldname['user_id'];
+
+        $membersql = "Select member_id from member_table where member_name = '" . $fullname ."'";
+        $resultmember = $conn->query($membersql);
+        $memberidfield = $resultmember -> fetch_assoc();
+
+        $memberId = $memberidfield['member_id'];
 
         //session variable
         $_SESSION['user_type'] = $usertype;
         $_SESSION['fullname'] = $fullname;
         $_SESSION['id'] = $id;
+        $_SESSION['memberid'] = $memberId;
 
         //success alert and redirect
         $swalScript = "

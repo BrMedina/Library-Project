@@ -7,6 +7,7 @@ $swalScript = '';
 // Get book_id from POST and store in session
 if(isset($_POST['borrow'])){
     $_SESSION['book_id'] = intval($_POST['book_id']);
+    $memberId = $_SESSION['memberid'];
 }
 
 // Get book_id from session
@@ -33,19 +34,33 @@ if($book_id > 0) {
 }
 
 if(isset($_POST['confirm'])){
-    $return_date = isset($_POST['return_date']) ? $_POST['return_date'] : '';
-$swalScript ="
-  <script>
-    Swal.fire({
-        title: 'Book successfully borrowed.',
-        icon: 'success',
-        timer: 1500,
-        showConfirmButton: false
-    }).then(()=>{
-        window.location.href = 'index.php';
-    });
-  </script>
-  ";
+    $return_date = $_POST['return_date'] ?? '';
+    $memberId = isset($_SESSION['memberid']) ? intval($_SESSION['memberid']) : 0;
+    $borrow_date = date('Y-m-d');
+
+    if($book_id > 0 && $memberId > 0 && $return_date !== '') {
+        $return_date = $conn->real_escape_string($return_date);
+        $insertBorrowQuery = "INSERT INTO borrowing_record_table (book_id, member_id, borrow_date, return_date, status) VALUES ($book_id, $memberId, '$borrow_date', '$return_date', 'borrowed')";
+        $res = $conn->query($insertBorrowQuery);
+
+        $updateBookQuery = "UPDATE book_table SET availability_status = 'Borrowed' WHERE book_id = $book_id";
+        $updateRes = $conn->query($updateBookQuery);
+
+        if($res) {
+            $swalScript = "
+            <script>
+                Swal.fire({
+                    title: 'Book successfully borrowed.',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(()=>{
+                    window.location.href = 'index.php';
+                });
+            </script>
+            ";
+        }
+    }
 } ?>
 
 <!DOCTYPE html>
