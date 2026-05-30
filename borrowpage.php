@@ -103,7 +103,7 @@ if(isset($_POST['confirm'])){
           <a class="nav-link" aria-current="page" href="index.php"><i class="bi bi-house me-2"></i>Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-book me-2"></i></i>My Library</a>
+          <a class="nav-link" href="mylibrary.php"><i class="bi bi-book me-2"></i>My Library</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="index.php#categories"><i class="bi bi-card-list me-2"></i>Category</a>

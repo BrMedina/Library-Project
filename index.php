@@ -57,24 +57,18 @@ $allBooksRes = $conn->query($allBooksQuery);
       
     <h1>E-Library</h1>
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Home</a>
+          <a class="nav-link" aria-current="page" href="index.php"><i class="bi bi-house me-2"></i>Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-book me-2"></i></i>My Library</a>
+          <a class="nav-link" href="mylibrary.php"><i class="bi bi-book me-2"></i>My Library</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#categories"><i class="bi bi-card-list me-2"></i>Category</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-bookmark-heart me-2"></i>Favourite</a>
+          <a class="nav-link" href="index.php#categories"><i class="bi bi-card-list me-2"></i>Category</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#"><i class="bi bi-info-circle me-2"></i>About</a>
         </li>
         <hr>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-gear me-2"></i>Settings</a>
-        </li>
         <li class="nav-item">
           <a class="nav-link" href="index.php?logout=1"><i class="bi bi-box-arrow-left me-2"></i>Logout</a>
         </li>
