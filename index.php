@@ -2,6 +2,12 @@
 require "dbconnection.php";
 session_start();
 
+$accountName = $_SESSION['fullname'] ?? 'Guest';
+$accountImage = $_SESSION['image_path'] ?? './assets/emptyProfile.jpg';
+$isLoggedIn = isset($_SESSION['id']);
+$searchInput = isset($_GET['q']) ? trim($_GET['q']) : '';
+$searchSql = $searchInput !== '' ? $conn->real_escape_string($searchInput) : '';
+
 // Handle logout
 if(isset($_GET['logout']) && $_GET['logout'] == '1') {
     session_destroy();
@@ -9,16 +15,22 @@ if(isset($_GET['logout']) && $_GET['logout'] == '1') {
     exit();
 }
 
-$query = 'SELECT * FROM book_table ORDER BY RAND() LIMIT 4';
+$query = $searchInput !== ''
+  ? "SELECT * FROM book_table WHERE (title LIKE '%$searchSql%' OR author LIKE '%$searchSql%' OR genre LIKE '%$searchSql%' OR ISBN LIKE '%$searchSql%') ORDER BY title LIMIT 4"
+  : 'SELECT * FROM book_table ORDER BY RAND() LIMIT 4';
 
 $res = $conn->query($query);
 
 // Query to get all unique genres
-$genreQuery = 'SELECT DISTINCT genre FROM book_table ORDER BY genre';
+$genreQuery = $searchInput !== ''
+  ? "SELECT DISTINCT genre FROM book_table WHERE (title LIKE '%$searchSql%' OR author LIKE '%$searchSql%' OR genre LIKE '%$searchSql%' OR ISBN LIKE '%$searchSql%') ORDER BY genre"
+  : 'SELECT DISTINCT genre FROM book_table ORDER BY genre';
 $genreRes = $conn->query($genreQuery);
 
 // Query to get all books
-$allBooksQuery = 'SELECT * FROM book_table ORDER BY title';
+$allBooksQuery = $searchInput !== ''
+  ? "SELECT * FROM book_table WHERE (title LIKE '%$searchSql%' OR author LIKE '%$searchSql%' OR genre LIKE '%$searchSql%' OR ISBN LIKE '%$searchSql%') ORDER BY title"
+  : 'SELECT * FROM book_table ORDER BY title';
 $allBooksRes = $conn->query($allBooksQuery);
 ?>
 
@@ -44,6 +56,12 @@ $allBooksRes = $conn->query($allBooksQuery);
         <img src="./assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
       </a>
     </div>
+    <?php if($isLoggedIn): ?>
+      <div class="d-flex align-items-center gap-2 ms-auto me-3">
+        <img src="<?php echo htmlspecialchars($accountImage); ?>" alt="Account" width="34" height="34" class="rounded-circle" style="object-fit: cover;">
+        <span class="fw-semibold text-dark d-none d-md-inline"><?php echo htmlspecialchars($accountName); ?></span>
+      </div>
+    <?php endif; ?>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -79,8 +97,24 @@ $allBooksRes = $conn->query($allBooksQuery);
 
 <!-- MAIN SECTION (Display list of Recommended books, Books by category, etc.) -->
 <main id="main" class="bg-secondary-subtle p-5 d-flex flex-column gap-5">
+  <div class="p-4 shadow-sm rounded-4 bg-white">
+    <form method="GET" action="index.php" class="row g-3 align-items-center">
+      <div class="col-md-10">
+        <input type="search" name="q" class="form-control form-control-lg" placeholder="Search books by title, author, genre, or ISBN" value="<?php echo htmlspecialchars($searchInput); ?>">
+      </div>
+      <div class="col-md-2 d-grid gap-2">
+        <button type="submit" class="btn btn-primary btn-lg">Search</button>
+      </div>
+    </form>
+  </div>
+
   <div class="p-5 shadow-sm rounded-4 bg-white">
-    <h2>Recommended</h2>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <h2 class="mb-0"><?php echo $searchInput !== '' ? 'Search Results' : 'Recommended'; ?></h2>
+      <?php if($searchInput !== ''): ?>
+        <a href="index.php" class="btn btn-outline-secondary btn-sm">Clear Search</a>
+      <?php endif; ?>
+    </div>
     <div class="row g-4 mt-2">
       <?php
       if($res->num_rows > 0){
@@ -116,7 +150,12 @@ $allBooksRes = $conn->query($allBooksQuery);
     </div>  
   </div>
   <div class="p-5 shadow-sm rounded-4 bg-white" id="categories">
-    <h2>Categories</h2>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+      <h2 class="mb-0">Categories</h2>
+      <?php if($searchInput !== ''): ?>
+        <span class="text-muted">Filtered by: <?php echo htmlspecialchars($searchInput); ?></span>
+      <?php endif; ?>
+    </div>
     <div class="mb-4 d-flex flex-nowrap overflow-x-auto pb-2" style="gap: 0.5rem;">
       <button class="btn btn-outline-primary mb-2 genre-filter rounded-pill" data-genre="all" style="white-space: nowrap;">All</button>
       <?php

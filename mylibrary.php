@@ -2,6 +2,9 @@
 require "dbconnection.php";
 session_start();
 
+$accountName = $_SESSION['fullname'] ?? 'Guest';
+$accountImage = $_SESSION['image_path'] ?? './assets/emptyProfile.jpg';
+
 // Redirect to login if user is not authenticated or has no member ID
 if (!isset($_SESSION['memberid'])) {
     header('Location: login.php');
@@ -9,13 +12,20 @@ if (!isset($_SESSION['memberid'])) {
 }
 
 $memberId = intval($_SESSION['memberid']);
+$searchInput = isset($_GET['q']) ? trim($_GET['q']) : '';
+$searchSql = $searchInput !== '' ? $conn->real_escape_string($searchInput) : '';
 
 // Fetch books currently borrowed by this user
 $query = "SELECT br.record_id, br.borrow_date, br.return_date, br.status, b.book_id, b.title, b.author, b.ISBN, b.genre, b.publication_date
           FROM borrowing_record_table br
           INNER JOIN book_table b ON br.book_id = b.book_id
-          WHERE br.member_id = $memberId AND br.status = 'borrowed'
-          ORDER BY br.borrow_date DESC";
+          WHERE br.member_id = $memberId AND br.status = 'borrowed'";
+
+if ($searchInput !== '') {
+  $query .= " AND (b.title LIKE '%$searchSql%' OR b.author LIKE '%$searchSql%' OR b.genre LIKE '%$searchSql%' OR b.ISBN LIKE '%$searchSql%' OR br.status LIKE '%$searchSql%' OR br.borrow_date LIKE '%$searchSql%' OR br.return_date LIKE '%$searchSql%')";
+}
+
+$query .= " ORDER BY br.borrow_date DESC";
 
 $res = $conn->query($query);
 ?>
@@ -41,6 +51,10 @@ $res = $conn->query($query);
       <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
         <img src="./assets/headerLogo.png" alt="Logo" width="220" height="45" class="d-inline-block align-text-top" draggable="false">
       </a>
+    </div>
+    <div class="d-flex align-items-center gap-2 ms-auto me-3">
+      <img src="<?php echo htmlspecialchars($accountImage); ?>" alt="Account" width="34" height="34" class="rounded-circle" style="object-fit: cover;">
+      <span class="fw-semibold text-dark d-none d-md-inline"><?php echo htmlspecialchars($accountName); ?></span>
     </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -76,8 +90,24 @@ $res = $conn->query($query);
 
 <!-- MAIN SECTION -->
 <main id="main" class="bg-secondary-subtle p-5 d-flex flex-column gap-5">
+  <div class="p-4 shadow-sm rounded-4 bg-white">
+    <form method="GET" action="mylibrary.php" class="row g-3 align-items-center">
+      <div class="col-md-10">
+        <input type="search" name="q" class="form-control form-control-lg" placeholder="Search your borrowed books" value="<?php echo htmlspecialchars($searchInput); ?>">
+      </div>
+      <div class="col-md-2 d-grid gap-2">
+        <button type="submit" class="btn btn-primary btn-lg">Search</button>
+      </div>
+    </form>
+  </div>
+
   <div class="p-5 shadow-sm rounded-4 bg-white">
-    <h2>My Library</h2>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <h2 class="mb-0"><?php echo $searchInput !== '' ? 'Search Results' : 'My Library'; ?></h2>
+      <?php if($searchInput !== ''): ?>
+        <a href="mylibrary.php" class="btn btn-outline-secondary btn-sm">Clear Search</a>
+      <?php endif; ?>
+    </div>
     <p class="text-muted">Below are the books you currently have borrowed.</p>
     <div class="row g-4 mt-2">
       <?php

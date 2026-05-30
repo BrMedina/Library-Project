@@ -23,6 +23,7 @@ if(isset($_POST['sub'])) {
         $fullname = $fieldname['full_name'];
         $usertype = $fieldname['role'];
         $id = $fieldname['user_id'];
+        $imagePath = $fieldname['image_path'] ?? 'assets/emptyProfile.jpg';
 
         $membersql = "Select member_id from member_table where member_name = '" . $fullname ."'";
         $resultmember = $conn->query($membersql);
@@ -35,6 +36,7 @@ if(isset($_POST['sub'])) {
         $_SESSION['fullname'] = $fullname;
         $_SESSION['id'] = $id;
         $_SESSION['memberid'] = $memberId;
+        $_SESSION['image_path'] = $imagePath;
 
         $logssql = "INSERT INTO logs_table (user_id, action, datetime) 
         VALUES ('" . $_SESSION['id'] . "', 'Logged In', NOW())";

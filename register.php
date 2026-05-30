@@ -25,8 +25,8 @@ if(isset($_POST['sub'])){
     $status = "Pending";
     $userTableCol = $number;
 
-    $insertSql = "INSERT INTO user_table (full_name, role, username, password, email, user_tablecol, otp, status)
-    VALUES ('$membername', '$role', '$username', '$password', '$email', '$userTableCol', '$otp', '$status')";
+    $insertSql = "INSERT INTO user_table (full_name, role, username, password, email, user_tablecol, image_path, otp, status)
+    VALUES ('$membername', '$role', '$username', '$password', '$email', '$userTableCol', '$imagepath', '$otp', '$status')";
 
     $res = $conn->query($insertSql);
 
